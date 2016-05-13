@@ -119,25 +119,3 @@ target_link_libraries(paralispc
   # Boost
   ${Boost_LIBRARIES}
   )
-
-# ------------------------------------------------------------------------------
-# cpp_threshold_func
-
-add_executable(cpp_threshold_func cpp_threshold_func.cpp)
-target_link_libraries(cpp_threshold_func
-  # Use the target name here, not the bare library name.
-  libparalisp
-  ${Boost_LIBRARIES}
-  GraphicsMagick++)
-
-find_package(OpenMP)
-if(${OpenMP_FOUND})
-  add_executable(cpp_openmp cpp_openmp.cpp)
-  set_target_properties(cpp_threshold_func PROPERTIES COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
-  target_link_libraries(cpp_openmp
-    # Use the target name here, not the bare library name.
-    libparalisp
-    ${Boost_LIBRARIES})
-else()
-  message(WARNING "OpenMP was not found; not building OpenMP benchmark program")
-endif()
