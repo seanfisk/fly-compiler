@@ -1,5 +1,7 @@
 #!/usr/bin/python2.7
 
+# Script to simplify building with CMake and Ninja.
+
 from __future__ import print_function
 import argparse
 import shutil
@@ -7,7 +9,6 @@ import errno
 import os
 import subprocess
 from os.path import abspath, join
-
 
 LLVM_VERSION_TUPLE = ('3', '5', '1')
 BUILD_DIR = 'build'
@@ -18,6 +19,7 @@ arg_parser.add_argument('--clean', '-C', action='store_true',
                         help='Clean before building')
 clean = arg_parser.parse_args().clean
 
+# Clean the build directory if that was requested.
 if clean:
     print('Removing build directory')
     shutil.rmtree(BUILD_DIR, ignore_errors=True)
@@ -28,7 +30,7 @@ except OSError as exc:
     if exc.errno != errno.EEXIST:
         raise
 
-
+# Utility functions
 def brew(*args):
     return subprocess.check_output(['brew'] + list(args)).rstrip()
 
@@ -37,19 +39,42 @@ def run_in_build_dir(*args):
     subprocess.check_call(args, cwd=abspath(BUILD_DIR))
 
 
+# Get the path to the LLVM CMake modules.
 llvm_cmake_dir = join(
     brew('--cellar', 'llvm' + ''.join(LLVM_VERSION_TUPLE[:2])),
     '.'.join(LLVM_VERSION_TUPLE),
     'lib',
     'llvm-{}'.format('.'.join(LLVM_VERSION_TUPLE[:2])),
     'share', 'llvm', 'cmake')
+
+# Bison and Flex are keg-only, which means they are not symlinked into `brew
+# --prefix'. We can access the current versions through the opt/ directory,
+# given by `brew --prefix FORMULA'.
+#
+# We find these and put them on the PATH for CMake to find.
+try:
+    paths_var = os.environ['PATH']
+except KeyError:
+    paths = []
+else:
+    paths = paths_var.split(os.pathsep)
+for tool in ['flex', 'bison']:
+    paths.insert(0, join(brew('--prefix', tool), 'bin'))
+cmake_env = os.environ.copy()
+cmake_env['PATH'] = os.pathsep.join(paths)
+
+# Run CMake to generate the build files.
 src_dir = abspath(os.getcwd())
 os.chdir(BUILD_DIR)
-subprocess.check_call([
-    'cmake',
-    '-G', 'Ninja',
-    '-DCMAKE_PREFIX_PATH={}'.format(llvm_cmake_dir),
-    src_dir,
-])
+subprocess.check_call(
+    [
+        'cmake',
+        '-G', 'Ninja',
+        '-DCMAKE_PREFIX_PATH={}'.format(llvm_cmake_dir),
+        src_dir,
+    ],
+    env=cmake_env)
+
+# Run Ninja to compile.
 compiler = 'ninja'
 os.execlp(compiler, compiler)
