@@ -37,9 +37,6 @@ namespace paralisp {
 	class PLContext {
 		std::stack<PLBlock> blocks;
 		llvm::Module *module;
-		bool map_is_parallel;
-		bool enable_map_profiling;
-		paralisp::PLInt num_threads;
 
 		void initialize();
 
@@ -48,11 +45,8 @@ namespace paralisp {
 		ComparisonOps comparison_ops;
 		boost::unordered_set<std::string> stdlib_functions;
 
-		PLContext(bool map_is_parallel, bool enable_map_profiling, paralisp::PLInt num_threads) :
-			module(new llvm::Module("main", llvm::getGlobalContext())),
-			map_is_parallel(map_is_parallel),
-			enable_map_profiling(enable_map_profiling),
-			num_threads(num_threads) {
+		PLContext() :
+			module(new llvm::Module("main", llvm::getGlobalContext())) {
 			initialize();
 		}
 
@@ -69,18 +63,6 @@ namespace paralisp {
 		llvm::LLVMContext &get_llvm_context() {
 			// The module store's LLVM's context.
 			return module->getContext();
-		}
-
-		bool get_map_is_parallel() const {
-			return map_is_parallel;
-		}
-
-		bool get_enable_map_profiling() const {
-			return enable_map_profiling;
-		}
-
-		paralisp::PLInt get_num_threads() const {
-			return num_threads;
 		}
 
 		virtual ~PLContext();

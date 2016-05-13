@@ -29,10 +29,6 @@ void PLContext::initialize() {
 
 	stdlib_functions.insert("print");
 	stdlib_functions.insert("print-list");
-	stdlib_functions.insert("map-sequential");
-	stdlib_functions.insert("map-parallel");
-	stdlib_functions.insert("list-from-image");
-	stdlib_functions.insert("image-from-list");
 }
 
 
@@ -78,45 +74,6 @@ void PLContext::generate_code(NBlock &root) {
 			Function::Create(
 			    FunctionType::get(builder.getVoidTy(), arg_types, /*isVarArg=*/false),
 			    Function::ExternalLinkage, "print_list", module);
-		}
-
-		// Prototype for map_sequential and map_parallel
-		{
-			std::vector<Type *> passed_function_arg_types;
-			passed_function_arg_types.push_back(get_pl_int_ty());
-			std::vector<Type *> arg_types;
-			arg_types.push_back(
-			    PointerType::get(
-			        FunctionType::get(get_pl_int_ty(), passed_function_arg_types, /*isVarArg=*/false), /*AddressSpace=*/0));
-			arg_types.push_back(pl_int_ptr_ty);
-			arg_types.push_back(builder.getInt1Ty());
-			Function::Create(
-			    FunctionType::get(pl_int_ptr_ty, arg_types, /*isVarArg=*/false),
-			    Function::ExternalLinkage, "map_sequential", module);
-
-			arg_types.push_back(get_pl_int_ty());
-			Function::Create(
-			    FunctionType::get(pl_int_ptr_ty, arg_types, /*isVarArg=*/false),
-			    Function::ExternalLinkage, "map_parallel", module);
-		}
-
-		// Prototype for list_from_image
-		{
-			std::vector<Type *> arg_types;
-			Function::Create(
-			    FunctionType::get(pl_int_ptr_ty, arg_types, /*isVarArg=*/false),
-			    Function::ExternalLinkage, "list_from_image", module);
-		}
-
-		// Prototype for image_from_list
-		{
-			std::vector<Type *> arg_types;
-			arg_types.push_back(get_pl_int_ty());
-			arg_types.push_back(get_pl_int_ty());
-			arg_types.push_back(pl_int_ptr_ty);
-			Function::Create(
-			    FunctionType::get(get_pl_int_ty(), arg_types, /*isVarArg=*/false),
-			    Function::ExternalLinkage, "image_from_list", module);
 		}
 	}
 

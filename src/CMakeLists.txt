@@ -18,19 +18,12 @@ link_directories(${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
 # ------------------------------------------------------------------------------
 # Dependencies
 
-# pthread - only for stdlib
-find_package(Threads REQUIRED)
-
 # Boost - headers and libraries
 set(Boost_USE_STATIC_LIBS ON)
 ## The library list *does not* include header-only libraries.
 find_package(Boost 1.60 REQUIRED
   program_options
   filesystem
-  timer
-  thread
-  system
-  chrono
   )
 
 ## Show Boost info
@@ -57,14 +50,6 @@ link_directories(${LLVM_LIBRARY_DIRS})
 # We couldn't find the correct way to add these definitions on a per-target basis.
 add_definitions(${LLVM_DEFINITIONS})
 
-# GraphicsMagick - header for stdlib, header and libraries for benchmark programs
-find_package(PkgConfig)
-pkg_check_modules(PC_GRAPHICSMAGICK++ GraphicsMagick++)
-
-find_path(GRAPHICSMAGICK++_INCLUDE_DIR Magick++.h
-  HINTS ${PC_GRAPHICSMAGICK++_INCLUDEDIR} ${PC_GRAPHICSMAGICK++_INCLUDE_DIRS})
-include_directories(${GRAPHICSMAGICK++_INCLUDE_DIR})
-
 find_package(FLEX REQUIRED 2.6)
 find_package(BISON REQUIRED 3.0)
 
@@ -72,7 +57,6 @@ find_package(BISON REQUIRED 3.0)
 # libparalisp - Paralisp standard library
 
 add_library(libparalisp stdlib.cpp)
-set_target_properties(libparalisp PROPERTIES COMPILE_FLAGS "-pthread ${GRAPHICSMAGICK++_CFLAGS}")
 
 # We called the target "libparalisp" to clearly distinguish it from "paralispc" later (which was originally called "paralisp"). However, CMake uses the bare name to determine the library name, so we must reset it.
 set_target_properties(libparalisp PROPERTIES OUTPUT_NAME paralisp)

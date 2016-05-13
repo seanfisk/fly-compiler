@@ -39,10 +39,6 @@ po::variables_map paralisp::parse_args(int argc, char *argv[]) {
 	("lib-path,L", po::value<LibrarySearchPaths>()->composing(), "library search path (passed to clang with -L)")
 	("asm-only,S", "output assembler instead of an executable, defaults to native asm")
 	("emit-llvm,R", "output LLVM IR instead of native asm")
-	("parallel,P", "run map operations in parallel")
-	("enable-map-profiling", "profile the map operation")
-	("num-threads,n", po::value<paralisp::PLInt>()->default_value(-1),
-	 "number of threads on which to map, default is num processors at *runtime*")
 	;
 	po::options_description debug_options("Debug options");
 	debug_options.add_options()

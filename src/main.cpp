@@ -35,10 +35,7 @@ int main(int argc, char *argv[]) {
 		std::exit(1);
 	}
 
-	paralisp::PLContext context(
-	    /*map_is_parallel=*/args.count("parallel") > 0,
-	    /*enable_map_profiling=*/args.count("enable-map-profiling") > 0,
-	    /*num_threads=*/args["num-threads"].as<paralisp::PLInt>());
+	paralisp::PLContext context;
 	paralisp::NBlock root_node = driver.get_root();
 	context.generate_code(root_node);
 

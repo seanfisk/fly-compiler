@@ -2,7 +2,6 @@
 
 #include <llvm/IR/Function.h>
 #include <llvm/IR/IRBuilder.h>
-// #include <llvm/IR/Instructions.h>
 #include <llvm/IR/Verifier.h> // for 'verifyFunction'
 
 #include <boost/unordered_map.hpp>
@@ -281,20 +280,9 @@ static inline Value *generate_comparison_expression(PLContext &context, const st
 static inline Value *generate_function_call(PLContext &context, std::string function_name, const SexpList &members) {
 	// Function call
 
-	bool is_map = false;
 	int num_passed_args = members.size();
 
-	if (function_name == "map") {
-		is_map = true;
-		num_passed_args += 1;
-
-		if (context.get_map_is_parallel()) {
-			function_name += "_parallel";
-			num_passed_args += 1;
-		} else {
-			function_name += "_sequential";
-		}
-	} else if (context.stdlib_functions.count(function_name)) {
+	if (context.stdlib_functions.count(function_name)) {
 		// Identifiers in Scheme should use hyphens, but those aren't allowed in our standard library functions because they are written in C++. Convert to hyphens to underscores before creating a call to a stdlib function.
 		boost::replace_all(function_name, "-", "_");
 	}
@@ -316,15 +304,6 @@ static inline Value *generate_function_call(PLContext &context, std::string func
 
 	BOOST_FOREACH(SexpList::value_type sexp, members) {
 		code_genned_arguments.push_back(boost::apply_visitor(CodeGenVisitor(context), sexp));
-	}
-
-	if (is_map) {
-		IRBuilder<> builder(context.get_llvm_context());
-		code_genned_arguments.push_back(builder.getInt1(context.get_enable_map_profiling()));
-
-		if (context.get_map_is_parallel()) {
-			code_genned_arguments.push_back(get_pl_int(context.get_num_threads()));
-		}
 	}
 
 	std::string call_name;

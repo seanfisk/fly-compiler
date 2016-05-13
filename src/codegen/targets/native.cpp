@@ -61,15 +61,6 @@ void paralisp::compile_executable(paralisp::PLContext &context, const fs::path &
 	// Link to libparalisp.a, the paralisp standard library.
 	args.push_back("-lparalisp");
 
-	// Add necessary Boost libraries.
-	args.push_back("-lboost_system");
-	args.push_back("-lboost_thread-mt");
-	args.push_back("-lboost_timer");
-
-	// Add necessary GraphicsMagick libraries.
-	args.push_back("-lGraphicsMagick++");
-	args.push_back("-lGraphicsMagick");
-
 	// Also link with LLVM'S libc++. This has to be hard-coded because we are not invoking Clang in a way (even though we are using clang++) where it would think that we are linking C++ code.
 	// Note that this doesn't work, at least on my Mac OS 10.9, with `-lstdc++' (GCC's libstdc++). Only `-lc++' (LLVM's libc++) seems to work.
 	args.push_back("-lc++");
