@@ -65,7 +65,7 @@ find_path(GRAPHICSMAGICK++_INCLUDE_DIR Magick++.h
   HINTS ${PC_GRAPHICSMAGICK++_INCLUDEDIR} ${PC_GRAPHICSMAGICK++_INCLUDE_DIRS})
 include_directories(${GRAPHICSMAGICK++_INCLUDE_DIR})
 
-find_package(FLEX REQUIRED 2.5)
+find_package(FLEX REQUIRED 2.6)
 find_package(BISON REQUIRED 3.0)
 
 # ------------------------------------------------------------------------------
