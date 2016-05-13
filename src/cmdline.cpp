@@ -17,8 +17,7 @@ static std::string generate_usage(const char *program_name, const po::options_de
 	   "Fly compiler\n" <<
 	   options << "\n" <<
 	   version_info() << "\n" <<
-	   "Written by Sean Fisk <sean@seanfisk.com>\n" <<
-	   "Advised by Dr. Greg Wolffe";
+		"Based on Paralisp by Sean Fisk <sean@seanfisk.com>";
 	return ss.str();
 }
 
