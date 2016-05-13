@@ -23,7 +23,6 @@ namespace fly {
 	struct NBlock;
 
 	typedef boost::unordered_map<std::string, llvm::Value *> SymbolTable;
-	typedef boost::unordered_map<std::string, llvm::Instruction::BinaryOps> BinaryOps;
 	typedef boost::unordered_map<std::string, llvm::CmpInst::Predicate> ComparisonOps;
 
 	struct PLBlock {
@@ -41,7 +40,6 @@ namespace fly {
 		void initialize();
 
 	public:
-		BinaryOps binary_ops;
 		ComparisonOps comparison_ops;
 		boost::unordered_set<std::string> stdlib_functions;
 

@@ -31,7 +31,7 @@ static fly::Parser::location_type loc;
 %option debug
 
 /* Definitions */
-ident [-+*/!@%^&<>=.a-zA-Z0-9_]+
+ident [!@%^&<>=.a-zA-Z0-9_]+
 integer -?[0-9]+
 blank [ \t]
 

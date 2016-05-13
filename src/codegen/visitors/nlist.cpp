@@ -238,24 +238,6 @@ static inline Value *generate_if(PLContext &context, const SexpList &members) {
 	return phi_node;
 }
 
-static inline Value *generate_binary_expression(PLContext &context, const std::string &op, const SexpList &members) {
-	// Binary arithmetic expression
-
-	std::cout << "Create binary arithmetic expression: " << op << std::endl;
-
-	if (members.size() != 2) {
-		std::cerr << "Operator `" << op << "' is a binary operator; " << members.size() << " arguments given." << std::endl;
-		std::exit(1);
-	}
-
-	IRBuilder<> builder(context.current_block());
-	return builder.CreateBinOp(
-	           context.binary_ops[op],
-	           boost::apply_visitor(CodeGenVisitor(context), members[0]),
-	           boost::apply_visitor(CodeGenVisitor(context), members[1]),
-	           op);
-}
-
 static inline Value *generate_comparison_expression(PLContext &context, const std::string &op, const SexpList &members) {
 	// Binary comparison expression
 
@@ -339,8 +321,6 @@ Value *CodeGenVisitor::operator()(const NList &node) const {
 		retval = generate_list(context, members);
 	} else if (function_name == "if") {
 		retval = generate_if(context, members);
-	} else if (context.binary_ops.count(function_name)) {
-		retval = generate_binary_expression(context, function_name, members);
 	} else if (context.comparison_ops.count(function_name)) {
 		retval = generate_comparison_expression(context, function_name, members);
 	} else {

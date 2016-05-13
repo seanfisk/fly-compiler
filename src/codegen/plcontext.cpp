@@ -16,11 +16,6 @@ PLContext::~PLContext() {
 }
 
 void PLContext::initialize() {
-	binary_ops["+"] = llvm::Instruction::Add;
-	binary_ops["-"] = llvm::Instruction::Sub;
-	binary_ops["*"] = llvm::Instruction::Mul;
-	binary_ops["/"] = llvm::Instruction::SDiv;
-
 	comparison_ops["="] = llvm::CmpInst::ICMP_EQ;
 	comparison_ops["<"] = llvm::CmpInst::ICMP_SLT;
 	comparison_ops[">"] = llvm::CmpInst::ICMP_SGT;
