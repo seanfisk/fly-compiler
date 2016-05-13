@@ -1,0 +1,55 @@
+#!/usr/bin/python2.7
+
+from __future__ import print_function
+import argparse
+import shutil
+import errno
+import os
+import subprocess
+from os.path import abspath, join
+
+
+LLVM_VERSION_TUPLE = ('3', '5', '1')
+BUILD_DIR = 'build'
+
+arg_parser = argparse.ArgumentParser(
+    description='Build the compiler using CMake and ninja')
+arg_parser.add_argument('--clean', '-C', action='store_true',
+                        help='Clean before building')
+clean = arg_parser.parse_args().clean
+
+if clean:
+    print('Removing build directory')
+    shutil.rmtree(BUILD_DIR, ignore_errors=True)
+
+try:
+    os.mkdir(BUILD_DIR)
+except OSError as exc:
+    if exc.errno != errno.EEXIST:
+        raise
+
+
+def brew(*args):
+    return subprocess.check_output(['brew'] + list(args)).rstrip()
+
+
+def run_in_build_dir(*args):
+    subprocess.check_call(args, cwd=abspath(BUILD_DIR))
+
+
+llvm_cmake_dir = join(
+    brew('--cellar', 'llvm' + ''.join(LLVM_VERSION_TUPLE[:2])),
+    '.'.join(LLVM_VERSION_TUPLE),
+    'lib',
+    'llvm-{}'.format('.'.join(LLVM_VERSION_TUPLE[:2])),
+    'share', 'llvm', 'cmake')
+src_dir = abspath(os.getcwd())
+os.chdir(BUILD_DIR)
+subprocess.check_call([
+    'cmake',
+    '-G', 'Ninja',
+    '-DCMAKE_PREFIX_PATH={}'.format(llvm_cmake_dir),
+    src_dir,
+])
+compiler = 'ninja'
+os.execlp(compiler, compiler)
