@@ -12,7 +12,7 @@
 #include <iostream>
 
 /* The location of the current token. */
-static paralisp::Parser::location_type loc;
+static fly::Parser::location_type loc;
 
 %}
 
@@ -50,17 +50,17 @@ blank [ \t]
 
 {blank}+ loc.step();
 [\n]+ loc.lines(yyleng); loc.step();
-"(" return paralisp::Parser::make_LPAREN(loc);
-")" return paralisp::Parser::make_RPAREN(loc);
-{integer} return paralisp::Parser::make_INTEGER(yytext, loc);
-{ident} return paralisp::Parser::make_IDENT(yytext, loc);
+"(" return fly::Parser::make_LPAREN(loc);
+")" return fly::Parser::make_RPAREN(loc);
+{integer} return fly::Parser::make_INTEGER(yytext, loc);
+{ident} return fly::Parser::make_IDENT(yytext, loc);
 . driver.error(loc, "Unknown token: `" + std::string(yytext) + "'");
-<<EOF>> return paralisp::Parser::make_END(loc);
+<<EOF>> return fly::Parser::make_END(loc);
 
 %%
 /* C++ code section */
 
-void paralisp::Driver::lex_begin()
+void fly::Driver::lex_begin()
 {
 	yy_flex_debug = trace_lexing;
 	if (input_path == "-") {
@@ -75,7 +75,7 @@ void paralisp::Driver::lex_begin()
 	}
 }
 
-void paralisp::Driver::lex_end()
+void fly::Driver::lex_end()
 {
 	fclose(yyin);
 }

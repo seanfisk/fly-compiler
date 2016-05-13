@@ -10,15 +10,15 @@
 #include <string>
 
 // Tell Flex the lexer's prototype ...
-#define YY_DECL paralisp::Parser::symbol_type yylex(paralisp::Driver &driver)
+#define YY_DECL fly::Parser::symbol_type yylex(fly::Driver &driver)
 // ... and declare it for the parser's sake.
 YY_DECL;
 
-namespace paralisp {
+namespace fly {
 	// Conduct the whole lexing and parsing process.
 	class Driver {
 		// The top level root node of our final AST.
-		paralisp::NBlock root_node;
+		fly::NBlock root_node;
 	public:
 		Driver();
 		virtual ~Driver();
@@ -27,8 +27,8 @@ namespace paralisp {
 		// Handling the lexer.
 		void lex_begin();
 		void lex_end();
-		paralisp::NBlock get_root() const;
-		void set_root(const paralisp::NBlock &root_node);
+		fly::NBlock get_root() const;
+		void set_root(const fly::NBlock &root_node);
 		void set_trace_parsing(bool trace_parsing);
 		void set_trace_lexing(bool trace_lexing);
 		bool trace_lexing;
@@ -41,7 +41,7 @@ namespace paralisp {
 		// Whether parser traces should be generated.
 		bool trace_parsing;
 		// Error handling.
-		void error(const paralisp::Parser::location_type &loc, const std::string &msg);
+		void error(const fly::Parser::location_type &loc, const std::string &msg);
 		void error(const std::string &msg);
 	};
 }

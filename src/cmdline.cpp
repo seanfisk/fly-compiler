@@ -8,13 +8,13 @@ namespace po = boost::program_options;
 namespace fs = boost::filesystem;
 
 static std::string version_info() {
-	return "Paralisp 0.1";
+	return "Fly 0.1";
 }
 
 static std::string generate_usage(const char *program_name, const po::options_description &options) {
 	std::ostringstream ss;
 	ss << "Usage: " << program_name << " [options] [INPUT_FILE]\n\n" <<
-	   "Paralisp compiler\n" <<
+	   "Fly compiler\n" <<
 	   options << "\n" <<
 	   version_info() << "\n" <<
 	   "Written by Sean Fisk <sean@seanfisk.com>\n" <<
@@ -22,7 +22,7 @@ static std::string generate_usage(const char *program_name, const po::options_de
 	return ss.str();
 }
 
-po::variables_map paralisp::parse_args(int argc, char *argv[]) {
+po::variables_map fly::parse_args(int argc, char *argv[]) {
 	po::options_description generic_options("Generic options");
 	generic_options.add_options()
 	("help,h", "show this help")

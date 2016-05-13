@@ -16,14 +16,14 @@ struct to_c_str {
 };
 
 // Credit: http://stackoverflow.com/a/17027869
-std::vector<const char *> paralisp::to_c_str_vector(const std::vector<std::string> &strings) {
+std::vector<const char *> fly::to_c_str_vector(const std::vector<std::string> &strings) {
 	std::vector<const char *> c_strings(strings.size());
 	std::transform(strings.begin(), strings.end(), c_strings.begin(), to_c_str());
 	return c_strings;
 }
 
 // Uses Boost.Filesystem's unique_path along with atomic open to safely create a temporary file.
-fs::path paralisp::make_safe_temp_file(const fs::path &model) {
+fs::path fly::make_safe_temp_file(const fs::path &model) {
 	// unique_path allows us to create a very probably unique temporary file. But we still need to check for the file's existence. In checking for the file's existence, a race condition can occur between the check and the creation of the file. Therefore, we must use the O_EXCL which makes open(...) atomic.
 	// POSIX mkstemp() is pretty close to doing what we want, but it doesn't allow the template to have a custom extension. That's a problem for us, because we need native assembler to have a .s extension for clang to recognize it. Moving the file undoes the whole purpose of this function...
 	// Of course, after the file is open, there is nothing preventing other processes from writing to it then as well.

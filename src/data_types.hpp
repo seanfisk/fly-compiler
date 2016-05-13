@@ -5,8 +5,8 @@
 #include <llvm/IR/DerivedTypes.h>
 #include <llvm/IR/Constants.h>
 
-namespace paralisp {
-	typedef int64_t PLInt;
-	llvm::ConstantInt *get_pl_int(PLInt value);
+namespace fly {
+	typedef int64_t Int;
+	llvm::ConstantInt *get_pl_int(Int value);
 	llvm::IntegerType *get_pl_int_ty();
 }

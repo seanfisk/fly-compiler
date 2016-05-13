@@ -10,7 +10,7 @@
 #include <vector>
 #include <iostream>
 
-namespace paralisp {
+namespace fly {
 	struct Node {
 		virtual ~Node() {}
 	};
@@ -20,10 +20,10 @@ namespace paralisp {
 	struct NAtom : public NSexp {};
 
 	struct NInteger : public NAtom {
-		PLInt value;
+		Int value;
 		// The default constructor is needed by Bison -- initialize value to 0, I guess?
 		NInteger() : value(0) {}
-		NInteger(PLInt value) : value(value) {}
+		NInteger(Int value) : value(value) {}
 	};
 
 	struct NIdent : public NAtom {

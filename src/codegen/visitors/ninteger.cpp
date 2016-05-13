@@ -1,7 +1,7 @@
 #include "codegen/visitors.hpp"
 #include "data_types.hpp"
 
-using namespace paralisp;
+using namespace fly;
 using namespace llvm;
 
 Value *CodeGenVisitor::operator()(const NInteger &node) const {

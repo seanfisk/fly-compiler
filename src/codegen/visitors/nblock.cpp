@@ -5,7 +5,7 @@
 #include <boost/variant/apply_visitor.hpp>
 #include <boost/foreach.hpp>
 
-using namespace paralisp;
+using namespace fly;
 using namespace llvm;
 
 Value *CodeGenVisitor::operator()(const NBlock &node) const {

@@ -12,7 +12,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 # Put the static libraries in the root of the build directory. Using ARCHIVE_OUTPUT_DIRECTORY doesn't seem to work anywhere.
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
-# Other executables need to be able to find our libraries (libparalisp).
+# Other executables need to be able to find our libraries (libfly).
 link_directories(${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
 
 # ------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ endif()
 
 include_directories(${Boost_INCLUDE_DIR})
 
-# LLVM - flags, headers, and libraries, only for paralispc
+# LLVM - flags, headers, and libraries, only for flyc
 ## See <http://llvm.org/docs/CMake.html#embedding-llvm-in-your-project>
 
 find_package(LLVM REQUIRED)
@@ -54,20 +54,20 @@ find_package(FLEX REQUIRED 2.6)
 find_package(BISON REQUIRED 3.0)
 
 # ------------------------------------------------------------------------------
-# libparalisp - Paralisp standard library
+# libfly - Fly standard library
 
-add_library(libparalisp stdlib.cpp)
+add_library(libfly stdlib.cpp)
 
-# We called the target "libparalisp" to clearly distinguish it from "paralispc" later (which was originally called "paralisp"). However, CMake uses the bare name to determine the library name, so we must reset it.
-set_target_properties(libparalisp PROPERTIES OUTPUT_NAME paralisp)
+# We called the target "libfly" to clearly distinguish it from "flyc" later (which was originally called "fly"). However, CMake uses the bare name to determine the library name, so we must reset it.
+set_target_properties(libfly PROPERTIES OUTPUT_NAME fly)
 
 # ------------------------------------------------------------------------------
-# paralispc - Paralisp compiler
+# flyc - Fly compiler
 bison_target(parser parser.yy ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp COMPILE_FLAGS "-Wall")
 flex_target(scanner lexer.ll ${CMAKE_CURRENT_BINARY_DIR}/lexer.cpp)
 add_flex_bison_dependency(scanner parser)
 
-add_executable(paralispc
+add_executable(flyc
   ${BISON_parser_OUTPUTS}
   ${FLEX_scanner_OUTPUTS}
   main.cpp
@@ -87,7 +87,7 @@ add_executable(paralispc
 
 llvm_map_components_to_libnames(REQ_LLVM_LIBRARIES nativecodegen option)
 
-target_link_libraries(paralispc
+target_link_libraries(flyc
   # We only need a subset of all the Clang support libraries. The
   # specific libraries which are needed were determined through good
   # old trial and error. The order does matter, since we need to have

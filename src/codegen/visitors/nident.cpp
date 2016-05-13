@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-using namespace paralisp;
+using namespace fly;
 using namespace llvm;
 
 Value *CodeGenVisitor::operator()(const NIdent &node) const {

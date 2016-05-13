@@ -18,7 +18,7 @@ using namespace llvm;
 
 namespace fs = boost::filesystem;
 
-void paralisp::print_native_asm(paralisp::PLContext &context, const fs::path &output_path) {
+void fly::print_native_asm(fly::PLContext &context, const fs::path &output_path) {
 	// This code is based on the code for the `llc' command, the LLVM static compiler.
 
 	// IMPORTANT: We must initialize the printer before targets are available. If we don't do this, we will fail out on addPassesToEmitFile.

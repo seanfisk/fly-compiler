@@ -4,30 +4,30 @@
 
 #include <iostream>
 
-using paralisp::PLInt;
+using fly::Int;
 
-static inline PLInt get_list_size(PLInt list_array[]) {
+static inline Int get_list_size(Int list_array[]) {
 	return list_array[0];
 }
 
-static inline PLInt *get_list_contents_ptr(PLInt list_array[]) {
+static inline Int *get_list_contents_ptr(Int list_array[]) {
 	return &list_array[1];
 }
 
 extern "C" {
 	// Language features
 
-	PLInt print(PLInt x) {
+	Int print(Int x) {
 		std::cout << "The integer: " << x << std::endl;
 		return x;
 	}
 
-	PLInt print_list(PLInt list_array[]) {
-		PLInt list_size = get_list_size(list_array);
-		PLInt *list = get_list_contents_ptr(list_array);
+	Int print_list(Int list_array[]) {
+		Int list_size = get_list_size(list_array);
+		Int *list = get_list_contents_ptr(list_array);
 		std::cout << "List: ";
 
-		for (PLInt i = 0; i < list_size - 1; ++i) {
+		for (Int i = 0; i < list_size - 1; ++i) {
 			std::cout << list[i] << " ";
 		}
 

@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 
-namespace paralisp {
+namespace fly {
 	boost::program_options::variables_map parse_args(int argc, char *argv[]);
 	typedef std::vector<boost::filesystem::path> LibrarySearchPaths;
 }

@@ -14,7 +14,7 @@
 // Assert that C++ variants are being used correctly.
 %define parse.assert
 // Redefine parser namespace and class name.
-%define api.namespace {paralisp}
+%define api.namespace {fly}
 %define parser_class_name {Parser}
 // Allow tracing of the parser.
 %define parse.trace
@@ -25,12 +25,12 @@
 {
 	#include "nodes.hpp"
 	#include "codegen/visitors.hpp"
-	namespace paralisp {
+	namespace fly {
 		class Driver;
 	}
 }
 
-%param { paralisp::Driver& driver }
+%param { fly::Driver& driver }
 %locations
 // This code was in the Bison Calc++ example. However, this doesn't do anything because the locations get overwritten. The solution is to assign the filename right before the error is printed.
 // %initial-action
@@ -64,24 +64,24 @@
 %token END 0 "end of file"
 
 // Define the type of node our nonterminal symbols represent.
-%type <paralisp::SexpVariant> sexp atom
-%type <paralisp::NList> list
-%type <paralisp::SexpList> sexp_list
-%type <paralisp::NInteger> numeric
-%type <paralisp::NIdent> ident
+%type <fly::SexpVariant> sexp atom
+%type <fly::NList> list
+%type <fly::SexpList> sexp_list
+%type <fly::NInteger> numeric
+%type <fly::NIdent> ident
 
 %printer { yyoutput << '"' << $$ << '"'; } <std::string>;
 %printer {
 	// We must create the visitor a priori and not pass it inline otherwise it will be `const'.
 	PrintVisitor visitor(yyoutput);
 	boost::apply_visitor(visitor, $$);
-} <paralisp::SexpVariant>;
+} <fly::SexpVariant>;
 %printer { yyoutput << "list of size " << $$.size(); } sexp_list;
 %printer {
 	// We must create the visitor a priori and not pass it inline otherwise it will be `const'.
 	PrintVisitor visitor(yyoutput);
 	// We need to *create* a variant in order to apply the visitor.
-	paralisp::SexpVariant variant = $$;
+	fly::SexpVariant variant = $$;
 	boost::apply_visitor(visitor, variant);
 } list numeric ident;
 
@@ -95,11 +95,11 @@
 
 program:
 	%empty
-| sexp_list { driver.set_root(paralisp::NBlock($1)); }
+| sexp_list { driver.set_root(fly::NBlock($1)); }
 ;
 
 sexp_list:
-	sexp { $$ = paralisp::SexpList(); $$.push_back($1); }
+	sexp { $$ = fly::SexpList(); $$.push_back($1); }
 | sexp_list sexp { $1.push_back($2); $$ = $1; }
 ;
 
@@ -109,8 +109,8 @@ sexp:
 ;
 
 list:
-	LPAREN sexp_list RPAREN { $$ = paralisp::NList($2); }
-| LPAREN RPAREN { paralisp::SexpList sexp_list; $$ = paralisp::NList(sexp_list); }
+	LPAREN sexp_list RPAREN { $$ = fly::NList($2); }
+| LPAREN RPAREN { fly::SexpList sexp_list; $$ = fly::NList(sexp_list); }
 ;
 
 atom:
@@ -119,16 +119,16 @@ atom:
 ;
 
 numeric:
-	INTEGER { $$ = paralisp::NInteger(boost::lexical_cast<PLInt>($1.c_str())); }
+	INTEGER { $$ = fly::NInteger(boost::lexical_cast<Int>($1.c_str())); }
 ;
 
 ident:
-	IDENT { $$ = paralisp::NIdent($1); }
+	IDENT { $$ = fly::NIdent($1); }
 ;
 
 %%
 // C++ code section
 
-void paralisp::Parser::error(const paralisp::Parser::location_type& loc, const std::string &msg) {
+void fly::Parser::error(const fly::Parser::location_type& loc, const std::string &msg) {
 	driver.error(loc, msg);
 }

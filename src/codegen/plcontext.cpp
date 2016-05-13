@@ -8,7 +8,7 @@
 
 #include <boost/variant/apply_visitor.hpp>
 
-using namespace paralisp;
+using namespace fly;
 using namespace llvm;
 
 PLContext::~PLContext() {

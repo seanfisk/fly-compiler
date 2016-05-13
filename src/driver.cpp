@@ -1,7 +1,7 @@
 #include "driver.hpp"
 #include "parser.hpp"
 
-using paralisp::Driver;
+using fly::Driver;
 namespace fs = boost::filesystem;
 
 Driver::Driver()
@@ -14,18 +14,18 @@ Driver::~Driver() {
 int Driver::parse(const fs::path &input_path) {
 	this->input_path = input_path;
 	lex_begin();
-	paralisp::Parser parser(*this);
+	fly::Parser parser(*this);
 	parser.set_debug_level(trace_parsing);
 	int res = parser.parse();
 	lex_end();
 	return res;
 }
 
-paralisp::NBlock Driver::get_root() const {
+fly::NBlock Driver::get_root() const {
 	return root_node;
 }
 
-void Driver::set_root(const paralisp::NBlock &root_node) {
+void Driver::set_root(const fly::NBlock &root_node) {
 	this->root_node = root_node;
 }
 
@@ -37,8 +37,8 @@ void Driver::set_trace_lexing(bool trace_lexing) {
 	this->trace_lexing = trace_lexing;
 }
 
-void Driver::error(const paralisp::Parser::location_type &loc, const std::string &msg) {
-	paralisp::Parser::location_type loc_with_file(loc);
+void Driver::error(const fly::Parser::location_type &loc, const std::string &msg) {
+	fly::Parser::location_type loc_with_file(loc);
 	// The location objects want a pointer to a non-const std::string. Make a copy to get around it.
 	std::string input_path_copy = input_path.native();
 	loc_with_file.begin.filename = loc_with_file.end.filename = &input_path_copy;

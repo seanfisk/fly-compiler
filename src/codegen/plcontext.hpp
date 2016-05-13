@@ -18,7 +18,7 @@
 #include <typeinfo>
 #include <string>
 
-namespace paralisp {
+namespace fly {
 
 	struct NBlock;
 

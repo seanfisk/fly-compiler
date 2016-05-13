@@ -4,14 +4,14 @@
 // TODO: The type int64_t is not guaranteed.
 #include <cstdint>
 
-namespace paralisp {
-	typedef int64_t PLInt;
+namespace fly {
+	typedef int64_t Int;
 }
 
 extern "C" {
 	// Language features
-	paralisp::PLInt print(paralisp::PLInt x);
-	paralisp::PLInt print_list(paralisp::PLInt list_array[]);
+	fly::Int print(fly::Int x);
+	fly::Int print_list(fly::Int list_array[]);
 }
 
 #endif

@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-namespace paralisp {
+namespace fly {
 	class CodeGenVisitor : public boost::static_visitor<llvm::Value *> {
 		PLContext &context;
 	public:

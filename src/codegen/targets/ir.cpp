@@ -12,7 +12,7 @@ using namespace llvm;
 
 namespace fs = boost::filesystem;
 
-void paralisp::dump_ir(paralisp::PLContext &context) {
+void fly::dump_ir(fly::PLContext &context) {
 	// Print the bytecode in a human-readable format to see if our program compiled properly.
 	std::cout << "Code is generated." << std::endl;
 	PassManager pm;
@@ -20,7 +20,7 @@ void paralisp::dump_ir(paralisp::PLContext &context) {
 	pm.run(*context.get_module());
 }
 
-void paralisp::print_ir(paralisp::PLContext &context, const fs::path &output_path) {
+void fly::print_ir(fly::PLContext &context, const fs::path &output_path) {
 	std::string output_file_error_info;
 	raw_fd_ostream output_stream(output_path.c_str(), output_file_error_info, sys::fs::F_Text);
 	// The 2nd argument is an (AssemblyAnnotationWriter *), which is apparently optional.

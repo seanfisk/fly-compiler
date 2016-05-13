@@ -23,9 +23,9 @@ namespace fs = boost::filesystem;
 llvm::llvm_shutdown_obj llvm_cleaner;
 
 int main(int argc, char *argv[]) {
-	po::variables_map args = paralisp::parse_args(argc, argv);
+	po::variables_map args = fly::parse_args(argc, argv);
 
-	paralisp::Driver driver;
+	fly::Driver driver;
 	driver.set_trace_lexing(args.count("trace-lexing") > 0);
 	driver.set_trace_parsing(args.count("trace-parsing") > 0);
 	int result = driver.parse(args["input-file"].as<fs::path>());
@@ -35,8 +35,8 @@ int main(int argc, char *argv[]) {
 		std::exit(1);
 	}
 
-	paralisp::PLContext context;
-	paralisp::NBlock root_node = driver.get_root();
+	fly::PLContext context;
+	fly::NBlock root_node = driver.get_root();
 	context.generate_code(root_node);
 
 	if (args.count("asm-only")) {
@@ -57,9 +57,9 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (args.count("emit-llvm")) {
-			paralisp::print_ir(context, output_path);
+			fly::print_ir(context, output_path);
 		} else {
-			paralisp::print_native_asm(context, output_path);
+			fly::print_native_asm(context, output_path);
 		}
 	} else if (args.count("emit-llvm")) {
 		std::cerr << "Option `--emit-llvm' may only be used with `--asm-only'." << std::endl;
@@ -68,10 +68,10 @@ int main(int argc, char *argv[]) {
 		const fs::path output_path = args.count("output-file") > 0 ? args["output-file"].as<fs::path>() : "a.out";
 
 		if (args.count("lib-path")) {
-			paralisp::compile_executable(context, output_path, args["lib-path"].as<paralisp::LibrarySearchPaths>());
+			fly::compile_executable(context, output_path, args["lib-path"].as<fly::LibrarySearchPaths>());
 		} else {
-			paralisp::LibrarySearchPaths lib_search_paths;
-			paralisp::compile_executable(context, output_path, lib_search_paths);
+			fly::LibrarySearchPaths lib_search_paths;
+			fly::compile_executable(context, output_path, lib_search_paths);
 		}
 	}
 

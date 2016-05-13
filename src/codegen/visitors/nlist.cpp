@@ -10,7 +10,7 @@
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string/replace.hpp>
 
-using namespace paralisp;
+using namespace fly;
 using namespace llvm;
 
 class NIdentVisitor : public boost::static_visitor<std::string> {
@@ -322,14 +322,14 @@ Value *CodeGenVisitor::operator()(const NList &node) const {
 	SexpList members = node.members;
 
 	if (members.size() == 0) {
-		std::cerr << "Paralisp does not support empty lists at this time." << std::endl;
+		std::cerr << "Fly does not support empty lists at this time." << std::endl;
 		std::exit(1);
 	}
 
 	std::cout << "Creating list with " << members.size() << " members." << std::endl;
 
 	Value *retval;
-	NIdentVisitor visitor("Paralisp does not support lists that do not begin with identifiers at this time.");
+	NIdentVisitor visitor("Fly does not support lists that do not begin with identifiers at this time.");
 	std::string function_name = boost::apply_visitor(visitor, members.front());
 	members.pop_front();
 

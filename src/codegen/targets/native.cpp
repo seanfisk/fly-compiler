@@ -20,14 +20,14 @@ using namespace llvm;
 
 namespace fs = boost::filesystem;
 
-void paralisp::compile_executable(paralisp::PLContext &context, const fs::path &output_path, const LibrarySearchPaths &lib_search_paths) {
+void fly::compile_executable(fly::PLContext &context, const fs::path &output_path, const LibrarySearchPaths &lib_search_paths) {
 	// Major credit here goes to <http://fdiv.net/2012/08/15/compiling-code-clang-api>
 	// Also see (cfe/lib/Frontend/CreateInvocationFromCommandLine.cpp)
 
 	// First produce the native assembler.
 
-	fs::path assembly_path = make_safe_temp_file("paralisp-%%%%-%%%%-%%%%-%%%%.s");
-	paralisp::print_native_asm(context, assembly_path);
+	fs::path assembly_path = make_safe_temp_file("fly-%%%%-%%%%-%%%%-%%%%.s");
+	fly::print_native_asm(context, assembly_path);
 
 	// Now use the Clang driver to compile to an executable. Clang will take care of calling the native assembler and linker for us.
 
@@ -52,14 +52,14 @@ void paralisp::compile_executable(paralisp::PLContext &context, const fs::path &
 	// Add inputs.
 	args.push_back(assembly_path.native());
 
-	// Include library search paths, primarily used for finding libparalisp.a.
+	// Include library search paths, primarily used for finding libfly.a.
 	BOOST_FOREACH(const fs::path & lib_search_path, lib_search_paths) {
 		args.push_back("-L");
 		args.push_back(lib_search_path.native());
 	}
 
-	// Link to libparalisp.a, the paralisp standard library.
-	args.push_back("-lparalisp");
+	// Link to libfly.a, the fly standard library.
+	args.push_back("-lfly");
 
 	// Also link with LLVM'S libc++. This has to be hard-coded because we are not invoking Clang in a way (even though we are using clang++) where it would think that we are linking C++ code.
 	// Note that this doesn't work, at least on my Mac OS 10.9, with `-lstdc++' (GCC's libstdc++). Only `-lc++' (LLVM's libc++) seems to work.

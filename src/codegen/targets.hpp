@@ -6,7 +6,7 @@
 
 #include <boost/filesystem.hpp>
 
-namespace paralisp {
+namespace fly {
 	void dump_ir(PLContext &context);
 	void print_ir(PLContext &context, const boost::filesystem::path &output_path);
 	void print_native_asm(PLContext &context, const boost::filesystem::path &output_path);
