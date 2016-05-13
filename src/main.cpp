@@ -9,7 +9,6 @@
 
 #include <boost/variant/get.hpp>
 #include <boost/program_options.hpp>
-// There is a choice here between using Boost.Filesystem or llvm::sys::fs and llvm::sys:path. We already require both libraries, so it's not like we're adding a dependency with either. The LLVM implementation is based on Boost, so it has a similar API. However, the LLVM implementation uses error codes instead of exceptions. Boost can also use error codes, but in my humble opinion exceptions are A Good Thing(TM).
 #include <boost/filesystem.hpp>
 
 #include <llvm/Support/ManagedStatic.h>
@@ -19,7 +18,6 @@ namespace fs = boost::filesystem;
 
 // When this object is destructed, internal LLVM structures will be deallocated.
 // See <http://lists.cs.uiuc.edu/pipermail/llvmdev/2007-December/011631.html>.
-// Another approach is llvm_shutdown(), shown later.
 llvm::llvm_shutdown_obj llvm_cleaner;
 
 int main(int argc, char *argv[]) {
@@ -74,9 +72,6 @@ int main(int argc, char *argv[]) {
 			fly::compile_executable(context, output_path, lib_search_paths);
 		}
 	}
-
-	// This is another way to "shut down" LLVM and deallocate internal structures.
-	// llvm::llvm_shutdown();
 
 	return 0;
 }
